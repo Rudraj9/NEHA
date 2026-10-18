@@ -1,0 +1,12 @@
+# ==============================================================================
+# NEHA Assistant - Milestone 3A Requirements
+# ==============================================================================
+# Official Groq Python SDK for fast LLM inference
+groq>=0.18.0
+
+# Library to read environment variables from local .env file
+python-dotenv>=1.0.0
+
+# Local offline text-to-speech engine using Windows SAPI5
+pyttsx3>=2.90
+pywin32>=300

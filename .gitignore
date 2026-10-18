@@ -1,0 +1,20 @@
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# Sensitive environment variables & secrets
+.env
+.env*.local
+
+# Except the example template (ensure .env.example stays tracked)
+!.env.example
+
+# Python bytecode and cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# IDE and Editor folders
+.vscode/
+.idea/
