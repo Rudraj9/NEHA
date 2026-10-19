@@ -39,12 +39,14 @@ CRITICAL Boundaries & Current Limitations:
 # Application startup welcome message
 WELCOME_MESSAGE: str = (
     f"Namaste {USER_NAME}! Main hoon {ASSISTANT_NAME}, aapka personal AI assistant.\n"
-    "Status: Milestone 3A - Powered by Groq AI & Local Text-to-Speech\n"
+    "Status: Milestone 3B - Powered by Groq AI & Sarvam Bulbul TTS (with Local SAPI5 fallback)\n"
     "Commands:\n"
     "  - Sawal puchein : Message type karein aur Enter dabayein.\n"
-    "  - '/voice on'   : Spoken responses enable karein.\n"
-    "  - '/voice off'  : Spoken responses mute karein (text-only mode).\n"
+    "  - '/voice on'    : Spoken responses enable karein.\n"
+    "  - '/voice off'   : Spoken responses mute karein (text-only mode).\n"
     "  - '/voice status': Current voice output settings aur status dekhein.\n"
-    "  - 'clear'       : Conversation history reset karke naya session shuru karein.\n"
-    "  - 'exit'/'quit' : Session samapt karke bahar nikalein."
+    "  - '/voice sarvam': Cloud Sarvam Bulbul TTS provider select karein.\n"
+    "  - '/voice local' : Local Windows SAPI5 TTS provider select karein.\n"
+    "  - 'clear'        : Conversation history reset karke naya session shuru karein.\n"
+    "  - 'exit'/'quit'  : Session samapt karke bahar nikalein."
 )

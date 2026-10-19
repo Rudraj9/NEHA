@@ -32,6 +32,7 @@ from voice import (
     get_voice_status,
     stop_speech,
     is_voice_enabled,
+    set_active_provider,
 )
 
 
@@ -107,6 +108,16 @@ def main() -> None:
 
             if clean_lower in ("/voice status", "voice status"):
                 print(f"\n[{ASSISTANT_NAME} Voice Settings]:\n{get_voice_status()}\n")
+                continue
+
+            if clean_lower in ("/voice sarvam", "voice sarvam"):
+                set_active_provider("sarvam")
+                print(f"\n[{ASSISTANT_NAME}]: Voice provider Sarvam AI Bulbul (Cloud) par set kar diya gaya hai.\n")
+                continue
+
+            if clean_lower in ("/voice local", "voice local"):
+                set_active_provider("local")
+                print(f"\n[{ASSISTANT_NAME}]: Voice provider Local Windows SAPI5 (Offline) par set kar diya gaya hai.\n")
                 continue
 
             # Case-insensitive clear command (resets session history)

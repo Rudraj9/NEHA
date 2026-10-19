@@ -11,6 +11,8 @@ from .tts import (
     stop_speech,
     init_engine,
     set_custom_engine,
+    get_active_provider,
+    set_active_provider,
 )
 
 __all__ = [
@@ -21,4 +23,7 @@ __all__ = [
     "stop_speech",
     "init_engine",
     "set_custom_engine",
+    "get_active_provider",
+    "set_active_provider",
 ]
+
