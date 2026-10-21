@@ -57,6 +57,7 @@ def _get_default_provider() -> str:
 # Module state
 _voice_enabled: bool = _get_env_voice_enabled()
 _active_provider: str = _get_default_provider()
+_is_speaking: bool = False
 
 
 def is_voice_enabled() -> bool:
@@ -68,6 +69,11 @@ def set_voice_enabled(enabled: bool) -> None:
     """Enables or disables voice output."""
     global _voice_enabled
     _voice_enabled = enabled
+
+
+def is_speaking() -> bool:
+    """Returns True if speech playback is currently active."""
+    return _is_speaking
 
 
 def get_active_provider() -> str:
@@ -115,6 +121,8 @@ def speak(text: str) -> bool:
     Returns:
         bool: True if spoken successfully, False otherwise.
     """
+    global _is_speaking
+
     # 1. When voice is disabled, make no requests (neither Sarvam nor local)
     if not _voice_enabled:
         return False
@@ -123,31 +131,37 @@ def speak(text: str) -> bool:
     if not clean_text:
         return False
 
-    # 2. Delegate to active provider
-    if _active_provider == PROVIDER_SARVAM:
-        try:
-            return speak_sarvam(clean_text)
-        except KeyboardInterrupt:
-            stop_speech()
-            raise
-        except Exception as e:
-            print(f"\n[Voice Warning]: Sarvam TTS error ({type(e).__name__}). Continuing in text-only mode.")
-            return False
+    _is_speaking = True
+    try:
+        # 2. Delegate to active provider
+        if _active_provider == PROVIDER_SARVAM:
+            try:
+                return speak_sarvam(clean_text)
+            except KeyboardInterrupt:
+                stop_speech()
+                raise
+            except Exception as e:
+                print(f"\n[Voice Warning]: Sarvam TTS error ({type(e).__name__}). Continuing in text-only mode.")
+                return False
 
-    elif _active_provider == PROVIDER_LOCAL:
-        try:
-            return speak_local(clean_text)
-        except KeyboardInterrupt:
-            stop_speech()
-            raise
-        except Exception as e:
-            print(f"\n[Voice Warning]: Local TTS error ({type(e).__name__}). Continuing in text-only mode.")
-            return False
+        elif _active_provider == PROVIDER_LOCAL:
+            try:
+                return speak_local(clean_text)
+            except KeyboardInterrupt:
+                stop_speech()
+                raise
+            except Exception as e:
+                print(f"\n[Voice Warning]: Local TTS error ({type(e).__name__}). Continuing in text-only mode.")
+                return False
 
-    return False
+        return False
+    finally:
+        _is_speaking = False
 
 
 def stop_speech() -> None:
     """Stops any active speech playback across both providers."""
+    global _is_speaking
+    _is_speaking = False
     stop_sarvam_speech()
     stop_local_speech()

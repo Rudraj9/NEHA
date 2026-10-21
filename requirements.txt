@@ -1,7 +1,7 @@
 # ==============================================================================
-# NEHA Assistant - Milestone 3A Requirements
+# NEHA Assistant - Requirements
 # ==============================================================================
-# Official Groq Python SDK for fast LLM inference
+# Official Groq Python SDK for fast LLM inference and Speech-to-Text (Whisper)
 groq>=0.18.0
 
 # Library to read environment variables from local .env file
@@ -14,3 +14,14 @@ pywin32>=300
 # HTTP client for Sarvam AI Bulbul Text-to-Speech API
 requests>=2.31.0
 
+# Microphone audio recording (PortAudio wrapper for Windows)
+sounddevice>=0.5.0
+
+# Numerical processing for audio buffers and silence RMS calculation
+numpy>=1.26.0
+
+# Native Desktop application wrapper (EdgeChromium/WebView2)
+pywebview>=6.0.0
+
+# Local wake-word detection engine (Picovoice Porcupine for Windows)
+pvporcupine>=4.0.0

@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEHA — Voice-First AI Companion</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-container">
+
+    <!-- Top Navigation Header -->
+    <header class="top-header">
+      <div class="header-left">
+        <div class="brand-badge">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+          </svg>
+        </div>
+        <div class="brand-info">
+          <h1>NEHA</h1>
+          <span class="brand-subtitle">Voice-First Companion</span>
+        </div>
+        <span class="model-pill" id="header-model-pill">Groq Llama-3</span>
+        <span class="provider-pill" id="header-provider-pill">Sarvam AI</span>
+      </div>
+
+      <div class="header-right">
+        <!-- Voice Output Quick Toggle -->
+        <button class="header-btn" id="btn-quick-voice-toggle" title="Toggle Spoken Voice Output">
+          <svg viewBox="0 0 24 24" id="header-voice-icon">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+          </svg>
+          <span id="header-voice-text">Voice ON</span>
+        </button>
+
+        <!-- Chat History Drawer Button with Unread Indicator -->
+        <button class="header-btn" id="btn-open-chat-drawer" title="Open Chat History (Session Only)">
+          <svg viewBox="0 0 24 24">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          </svg>
+          <span>Chat History</span>
+          <span class="unread-dot" id="chat-unread-dot" title="New message available"></span>
+        </button>
+
+        <!-- Settings Button -->
+        <button class="header-btn-icon" id="btn-open-settings" title="Settings">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Orb-Focused Stage -->
+    <main class="orb-stage">
+      <!-- Central Presence Canvas -->
+      <div class="orb-hero-container">
+        <canvas id="neha-orb-canvas"></canvas>
+      </div>
+
+      <!-- State & Status Headline -->
+      <div class="presence-status-block">
+        <div class="status-badge-row">
+          <span class="status-indicator-dot" id="main-status-dot"></span>
+          <span class="status-tag" id="main-status-tag">Hands-Free Off</span>
+        </div>
+        <h2 class="presence-headline" id="presence-state-title">NEHA</h2>
+        <p class="presence-subline" id="presence-state-desc">Hands-free is disabled. Enable below or click to talk.</p>
+      </div>
+
+      <!-- Main Action Controls -->
+      <div class="hero-action-bar">
+        <!-- Hands-Free Main Toggle Button -->
+        <button class="btn-handsfree" id="btn-toggle-handsfree" title="Toggle hands-free 'Hi NEHA' listening">
+          <div class="mic-wave-container" id="handsfree-mic-wave">
+            <svg viewBox="0 0 24 24" class="mic-icon">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+              <line x1="12" y1="19" x2="12" y2="23"></line>
+              <line x1="8" y1="23" x2="16" y2="23"></line>
+            </svg>
+          </div>
+          <div class="handsfree-btn-info">
+            <span class="handsfree-label" id="handsfree-btn-text">Enable Hands-Free</span>
+            <span class="handsfree-hint" id="handsfree-btn-hint">Listen for “Hi NEHA”</span>
+          </div>
+          <span class="handsfree-status-pill off" id="handsfree-state-pill">OFF</span>
+        </button>
+
+        <!-- Manual Push-to-Talk Mic Button (Fallback) -->
+        <button class="btn-action-circle" id="btn-manual-mic" title="Click to Talk (Manual Recording)">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+            <line x1="12" y1="19" x2="12" y2="23"></line>
+            <line x1="8" y1="23" x2="16" y2="23"></line>
+          </svg>
+          <span class="circle-btn-tooltip">Click to Talk</span>
+        </button>
+
+        <!-- Stop Speech Control (Visible when speaking) -->
+        <button class="btn-action-circle stop-speech-btn" id="btn-stop-speech-hero" title="Stop speech playback">
+          <svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12"></rect></svg>
+          <span class="circle-btn-tooltip">Stop Speech</span>
+        </button>
+      </div>
+
+      <!-- Microphone Active Banner (Explaining local detection boundary) -->
+      <div class="mic-privacy-notice" id="mic-privacy-notice">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+        <span>Wake-word detection runs 100% locally on your PC. Audio is only sent for transcription after “Hi NEHA” wakes the assistant.</span>
+      </div>
+
+      <!-- Manual Recording Progress Card (Hidden unless manual recording) -->
+      <div class="recording-bar" id="recording-bar">
+        <div class="recording-bar-left">
+          <span class="status-dot recording"></span>
+          <span>Microphone Active hai! Boliye...</span>
+          <span class="recording-timer" id="recording-timer">00:00 / 00:08s</span>
+        </div>
+        <div class="recording-bar-actions">
+          <button class="btn-sm-primary" id="btn-finish-recording" title="Finish recording early">Done Speaking</button>
+          <button class="btn-sm-ghost" id="btn-cancel-recording" title="Discard this recording">Cancel</button>
+        </div>
+      </div>
+
+      <!-- Manual Review Transcript Card (Hidden unless manual review) -->
+      <div class="review-card" id="review-card">
+        <div class="review-card-header">
+          <span class="review-card-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+            </svg>
+            Review Speech Transcript
+          </span>
+          <span style="font-size: 0.75rem; color: var(--text-dim);">Edit before sending</span>
+        </div>
+        <textarea class="review-card-textarea" id="review-textarea" rows="2" placeholder="Recognized speech..."></textarea>
+        <div class="review-card-actions">
+          <button class="btn-sm-ghost" id="btn-review-discard">Discard</button>
+          <button class="btn-sm-secondary" id="btn-review-record-again">Record Again</button>
+          <button class="btn-sm-primary" id="btn-review-send">Send to NEHA [Enter]</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Chat History Slide-Out Drawer -->
+    <aside class="chat-drawer" id="chat-history-drawer" aria-label="Conversation History" aria-hidden="true">
+      <div class="drawer-header">
+        <div>
+          <h3>Conversation History</h3>
+          <span class="drawer-subtitle">Session only • Cleared when app exits</span>
+        </div>
+        <div class="drawer-header-actions">
+          <button class="btn-drawer-action" id="btn-drawer-new-chat" title="Clear history and start fresh">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 5v14M5 12h14"/>
+            </svg>
+            <span>New Chat</span>
+          </button>
+          <button class="btn-drawer-close" id="btn-close-drawer" aria-label="Close Chat History">
+            <svg viewBox="0 0 24 24">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Messages Feed -->
+      <div class="drawer-messages-scroll" id="messages-container">
+        <div class="empty-state" id="empty-state">
+          <div class="empty-state-badge">SESSION MEMORY</div>
+          <h4>Namaste! Rocky.</h4>
+          <p>Main aapki personal conversational assistant NEHA hoon. Voice se boliye ya niche message type karein.</p>
+        </div>
+      </div>
+
+      <!-- Drawer Composer (Optional typed chat) -->
+      <div class="drawer-composer">
+        <textarea 
+          class="drawer-textarea" 
+          id="composer-input" 
+          rows="1" 
+          placeholder="Ask NEHA in Roman Hinglish or English... (Enter to send)"
+        ></textarea>
+        <button class="btn-drawer-send" id="btn-send" title="Send message">
+          <svg viewBox="0 0 24 24">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Drawer Backdrop Overlay -->
+    <div class="drawer-backdrop" id="drawer-backdrop"></div>
+
+    <!-- Wake-Word Setup Checklist Modal -->
+    <div class="modal-overlay" id="wake-setup-modal" role="dialog" aria-modal="true" aria-labelledby="wake-setup-title">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3 id="wake-setup-title">Setup “Hi NEHA” Wake-Word</h3>
+          <button class="btn-close-modal" id="btn-close-wake-setup" aria-label="Close">
+            <svg width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="settings-notice-badge" style="background: rgba(245, 158, 11, 0.12); border-color: rgba(245, 158, 11, 0.3); color: var(--accent-amber);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          <span>Wake-word detection requires a Picovoice AccessKey and custom .ppn model for “Hi NEHA”.</span>
+        </div>
+
+        <div class="setup-checklist-body" id="wake-setup-checklist-body">
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 12px;">
+            NEHA local detection use karti hai taaki continuous audio cloud par upload na ho. Setup karne ke liye yeh steps follow karein:
+          </p>
+          <ol class="setup-steps-list">
+            <li>
+              <strong>Picovoice AccessKey prapt karein:</strong><br>
+              <a href="#" id="link-picovoice-console" style="color: var(--accent-cyan-light); text-decoration: underline;">https://console.picovoice.ai/</a> par free account banayein aur AccessKey copy karein.
+            </li>
+            <li>
+              <strong>Custom Wake-Word train karein:</strong><br>
+              Console par <em>Porcupine > Wake Word</em> mein “Hi Neha” keyword add karein, platform <strong>Windows</strong> select karke train karein, aur <code>.ppn</code> file download karein.
+            </li>
+            <li>
+              <strong>.env file update karein:</strong><br>
+              Project root ke <code>.env</code> mein configure karein:
+              <pre style="background: rgba(0,0,0,0.4); padding: 8px 12px; border-radius: 6px; margin-top: 6px; font-size: 0.82rem; color: var(--accent-cyan-light);">PICOVOICE_ACCESS_KEY=your_key_here
+WAKE_WORD_MODEL_PATH=path/to/Hi-Neha_en_windows_v3_0_0.ppn</pre>
+            </li>
+          </ol>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px;">
+          <button class="btn-sm-primary" id="btn-wake-setup-ok">Samajh Gaya (Use Manual Mic for now)</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal-overlay" id="settings-modal" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3 id="settings-title">NEHA Companion Settings</h3>
+          <button class="btn-close-modal" id="btn-close-settings" aria-label="Close settings">
+            <svg width="20" height="20" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="settings-notice-badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="16" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+          </svg>
+          <span>Session-only settings. Changes apply dynamically without altering your .env file.</span>
+        </div>
+
+        <div class="settings-group">
+          <!-- Voice Output Toggle -->
+          <div class="setting-row">
+            <div class="setting-info">
+              <label for="setting-voice-enabled">Spoken Voice Output</label>
+              <span>Speak assistant responses aloud using selected voice provider</span>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="setting-voice-enabled" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <!-- TTS Provider -->
+          <div class="setting-row">
+            <div class="setting-info">
+              <label for="setting-tts-provider">Voice Provider</label>
+              <span>Sarvam AI Bulbul (Cloud) vs Windows SAPI5 (Offline)</span>
+            </div>
+            <select class="custom-select" id="setting-tts-provider">
+              <option value="sarvam">Sarvam AI Bulbul (Cloud)</option>
+              <option value="local">Local SAPI5 (Offline)</option>
+            </select>
+          </div>
+
+          <!-- Microphone Device Selection -->
+          <div class="setting-row">
+            <div class="setting-info">
+              <label for="setting-mic-device">Microphone Device</label>
+              <span>Select active audio input (e.g. headset or webcam mic)</span>
+            </div>
+            <div style="display: flex; gap: 6px; align-items: center;">
+              <select class="custom-select" id="setting-mic-device" style="max-width: 170px;">
+                <option value="">Default (System Input)</option>
+              </select>
+              <button class="btn-sm-secondary" id="btn-refresh-mics" title="Refresh audio devices" style="padding: 6px 10px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none">
+                  <polyline points="23 4 23 10 17 10"></polyline>
+                  <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- VAD Silence Duration (Endpointing) -->
+          <div class="setting-row">
+            <div class="setting-info">
+              <label for="setting-vad-silence">Voice Endpoint Silence (VAD)</label>
+              <span>Pause duration before ending speech turn (0.8s - 2.5s)</span>
+            </div>
+            <div class="range-input-wrapper">
+              <input type="range" id="setting-vad-silence" min="0.8" max="2.5" step="0.1" value="1.3">
+              <span class="range-value" id="val-vad-silence">1.3s</span>
+            </div>
+          </div>
+
+          <!-- Follow-up Listening Timeout -->
+          <div class="setting-row">
+            <div class="setting-info">
+              <label for="setting-vad-followup">Follow-up Listening Window</label>
+              <span>Duration to wait for follow-up question after answer (2s - 8s)</span>
+            </div>
+            <div class="range-input-wrapper">
+              <input type="range" id="setting-vad-followup" min="2.0" max="8.0" step="0.5" value="4.5">
+              <span class="range-value" id="val-vad-followup">4.5s</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Read-Only Diagnostics -->
+        <div style="background: rgba(0,0,0,0.25); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 12px; font-size: 0.78rem; color: var(--text-dim); margin-top: 14px;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+            <span>Chat LLM Model:</span>
+            <span style="color: var(--accent-violet-light);" id="diag-chat-model">-</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+            <span>Speech-to-Text Model:</span>
+            <span style="color: var(--accent-cyan-light);" id="diag-stt-model">-</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+            <span>Wake-Word Status:</span>
+            <span style="color: var(--accent-rose-light);" id="diag-wake-status">-</span>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span>Sarvam Voice Persona:</span>
+            <span style="color: var(--accent-cyan-light);" id="diag-sarvam-voice">-</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toast-container"></div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="orb.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
